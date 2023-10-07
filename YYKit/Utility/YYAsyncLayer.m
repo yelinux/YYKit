@@ -107,6 +107,11 @@ static dispatch_queue_t YYAsyncLayerGetReleaseQueue() {
 #pragma mark - Private
 
 - (void)_displayAsync:(BOOL)async {
+    // 修复iOS17闪退问题
+    if (self.bounds.size.width<=0 || self.bounds.size.height<=0) {
+        self.contents = nil;
+        return;
+    }
     __strong id<YYAsyncLayerDelegate> delegate = (id)self.delegate;
     YYAsyncLayerDisplayTask *task = [delegate newAsyncDisplayTask];
     if (!task.display) {
